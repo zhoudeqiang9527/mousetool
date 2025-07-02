@@ -43,7 +43,7 @@ class MouseKeyboardTool:
         """获取默认配置"""
         return {
             'ui': {'window_title': '键鼠操作工具', 'window_width': 550, 'window_height': 300, 'window_resizable': False, 'padding': '20'},
-            'mouse': {'default_x': 100, 'default_y': 100, 'default_click_count': 1, 'move_step': 5, 'scroll_threshold_y': 930, 'scroll_amount': -3, 'click_delay': 0.1, 'scroll_delay': 0.2},
+            'mouse': {'default_x': 100, 'default_y': 100, 'default_click_count': 1, 'move_step': 5, 'scroll_threshold_y': 930,  'click_delay': 0.1, 'scroll_delay': 0.2},
             'pyautogui': {'failsafe': True, 'pause': 0.1},
             'tracking': {'update_interval_ms': 100},
             'ui_text': {'coordinate_x_label': '坐标X:', 'coordinate_y_label': '坐标Y:', 'click_count_label': '点击数:', 'execute_button_text': '执行鼠标点击', 'current_x_prefix': '当前X: ', 'current_y_prefix': '当前Y: ', 'status_ready': '就绪', 'status_executing': '执行中...', 'status_completed': '执行完成', 'status_interrupted': '操作被中断', 'status_error': '执行出错', 'current_position_default': '--'},
@@ -160,8 +160,16 @@ class MouseKeyboardTool:
                     # 先点击当前位置确保焦点正确
                     pyautogui.click(current_x, current_y)
                     time.sleep(self.config['mouse']['click_delay'])
+                    # 计算滚轮量
+                    # 向上滚动的距离 = 距离阈值 - 当前距离，是step的整数倍
+                    scroll_amount = current_y * 2 - y - self.config['mouse']['scroll_threshold_y'] + (self.config['mouse']['move_step'] * 3)                    
+                    scroll_amount = scroll_amount * -1
+                    print(f"scroll_amount00001: {scroll_amount}   y: {y}")                    
+                    
+                    # 向上滚动
                     # 执行滚轮操作
-                    pyautogui.scroll(self.config['mouse']['scroll_amount'])
+                    # 执行滚轮操作
+                    pyautogui.scroll(scroll_amount)
                     time.sleep(self.config['mouse']['scroll_delay'])
                     # 重置Y坐标到起始位置
                     current_y = y
@@ -182,7 +190,13 @@ class MouseKeyboardTool:
                     # 先点击当前位置确保焦点正确
                     pyautogui.click(current_x, current_y)
                     time.sleep(self.config['mouse']['click_delay'])
-                    pyautogui.scroll(self.config['mouse']['scroll_amount'])
+                     # 计算滚轮量
+                    # 向上滚动的距离 = 距离阈值 - 当前距离
+                    scroll_amount = current_y * 2 - y - self.config['mouse']['scroll_threshold_y'] + (self.config['mouse']['move_step'] * 3)
+                    
+                    scroll_amount = scroll_amount * -1
+                    print(f"scroll_amount00002: {scroll_amount}   y: {y}   current_y: {current_y}")
+                    pyautogui.scroll(scroll_amount)
                     time.sleep(self.config['mouse']['scroll_delay'])
                     current_y = y
             

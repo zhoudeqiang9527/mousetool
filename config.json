@@ -10,9 +10,8 @@
     "default_x": 100,
     "default_y": 100,
     "default_click_count": 1,
-    "move_step": 5,
+    "move_step": 43,
     "scroll_threshold_y": 930,
-    "scroll_amount": -300,
     "click_delay": 0.1,
     "scroll_delay": 0.2
   },
