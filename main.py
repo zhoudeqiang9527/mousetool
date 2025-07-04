@@ -152,54 +152,28 @@ class MouseKeyboardTool:
                 pyautogui.click()
                 time.sleep(self.config['mouse']['click_delay'])
                 
-                # 向下移动指定像素
-                current_y += self.config['mouse']['move_step']
+                
+                next_y = current_y + self.config['mouse']['move_step']
                 
                 # 检查Y值是否大于阈值
-                if current_y > self.config['mouse']['scroll_threshold_y']:
-                    # 先点击当前位置确保焦点正确
-                    pyautogui.click(current_x, current_y)
-                    time.sleep(self.config['mouse']['click_delay'])
+                if next_y > self.config['mouse']['scroll_threshold_y']:                    
                     # 计算滚轮量
                     # 向上滚动的距离 = 距离阈值 - 当前距离，是step的整数倍
-                    scroll_amount = current_y * 2 - y - self.config['mouse']['scroll_threshold_y'] + (self.config['mouse']['move_step'] * 3)                    
-                    scroll_amount = scroll_amount * -1
-                    print(f"scroll_amount00001: {scroll_amount}   y: {y}")                    
+                              
                     
                     # 向上滚动
                     # 执行滚轮操作
                     # 执行滚轮操作
-                    pyautogui.scroll(scroll_amount)
+                    pyautogui.scroll(self.config['mouse']['move_step']*-1)
                     time.sleep(self.config['mouse']['scroll_delay'])
                     # 重置Y坐标到起始位置
-                    current_y = y
+                    current_y = next_y - self.config['mouse']['move_step']
+                    if current_y < y:
+                        current_y = y
+                else:
+                    current_y = next_y
                 
-                # 再次移动到新坐标
-                pyautogui.moveTo(current_x, current_y)
-                time.sleep(self.config['mouse']['click_delay'])
                 
-                # 再次点击
-                pyautogui.click()
-                time.sleep(self.config['mouse']['click_delay'])
-                
-                # 再次向下移动指定像素
-                current_y += self.config['mouse']['move_step']
-                
-                # 检查是否需要滚轮操作
-                if current_y > self.config['mouse']['scroll_threshold_y']:
-                    # 先点击当前位置确保焦点正确
-                    pyautogui.click(current_x, current_y)
-                    time.sleep(self.config['mouse']['click_delay'])
-                     # 计算滚轮量
-                    # 向上滚动的距离 = 距离阈值 - 当前距离
-                    scroll_amount = current_y * 2 - y - self.config['mouse']['scroll_threshold_y'] + (self.config['mouse']['move_step'] * 3)
-                    
-                    scroll_amount = scroll_amount * -1
-                    print(f"scroll_amount00002: {scroll_amount}   y: {y}   current_y: {current_y}")
-                    pyautogui.scroll(scroll_amount)
-                    time.sleep(self.config['mouse']['scroll_delay'])
-                    current_y = y
-            
             self.status_label.config(text=self.config['ui_text']['status_completed'], foreground="green")
             messagebox.showinfo(self.config['messages']['completion_title'], self.config['messages']['completion_message'].format(count=click_count))
             

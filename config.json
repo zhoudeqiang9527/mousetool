@@ -47,5 +47,11 @@
     "negative_coordinates_error": "坐标不能为负数",
     "invalid_click_count_error": "点击数必须大于0",
     "coordinates_out_of_bounds_error": "坐标超出屏幕范围 ({width}x{height})"
+  },
+  "logging": {
+    "06DEV_user":"devtestmaster1@ibmdev4rbbss.onmicrosoft.com",
+    "06DEV_password":"yourSecretCode1234",
+    "interDEV_user":"bssbatchexecuter@ibmdev4rbbss.onmicrosoft.com",
+    "interDEV_password":"bss202402!"
   }
 }
