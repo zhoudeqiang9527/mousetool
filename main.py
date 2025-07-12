@@ -157,19 +157,47 @@ class MouseKeyboardTool:
                 
                 # 检查Y值是否大于阈值
                 if next_y > self.config['mouse']['scroll_threshold_y']:                    
-                    # 计算滚轮量
-                    # 向上滚动的距离 = 距离阈值 - 当前距离，是step的整数倍
-                              
-                    
-                    # 向上滚动
-                    # 执行滚轮操作
+                   
                     # 执行滚轮操作
                     pyautogui.scroll(self.config['mouse']['move_step']*-1)
                     time.sleep(self.config['mouse']['scroll_delay'])
-                    # 重置Y坐标到起始位置
-                    current_y = next_y - self.config['mouse']['move_step']
-                    if current_y < y:
-                        current_y = y
+                    
+                    # 获取屏幕尺寸
+                    screen_width, screen_height = pyautogui.size()
+                    
+                    # 从当前X位置开始，向下搜索目标颜色
+                    found_target_color = False
+                    search_y = current_y  
+                    
+                    # 设置搜索的最大Y值，确保不超出屏幕
+                    max_search_y = min(screen_height - 10, self.config['mouse']['scroll_threshold_y'])
+                    
+                    while search_y < max_search_y and not found_target_color:
+                        # 移动到搜索位置
+                        pyautogui.moveTo(current_x, search_y)
+                        
+                        # 获取当前位置的屏幕颜色
+                        try:
+                            pixel_color = pyautogui.pixel(current_x, search_y)
+                            
+                            # 检查是否是目标颜色 RGB(106, 150, 203)
+                            if pixel_color == (106, 150, 203):
+                                found_target_color = True
+                                current_y = search_y
+                                break
+                        except:
+                            # 如果获取颜色失败，继续搜索
+                            pass
+                        
+                        # 向下移动搜索位置
+                        search_y += 5
+                        
+                        # 更新UI，避免界面冻结
+                        self.root.update()
+                    
+                    # 如果没有找到目标颜色，再次移动滚轮
+                    if not found_target_color:
+                        pyautogui.scroll(self.config['mouse']['monv_plus']*-1)
                 else:
                     current_y = next_y
                 
